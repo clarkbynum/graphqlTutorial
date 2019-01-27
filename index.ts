@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import graphqlHTTP from "express-graphql";
 import { buildSchema } from "graphql";
 
@@ -126,7 +126,13 @@ const root = {
   }
 };
 
+const loggingMiddleware: RequestHandler = (req, res, next) => {
+  console.log("ip:", req.ip);
+  next();
+};
+
 var app = express();
+app.use(loggingMiddleware);
 app.use(
   "/graphql",
   graphqlHTTP({
